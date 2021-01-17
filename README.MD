@@ -36,6 +36,10 @@ As of 2021-01-17 this will only populate the database with all ads.txt entries.
 
 Luis Sastre Verzun
 
+## Shout outs
+
+* Peter Brendan (https://sellersjsons.com/)
+
 ## License
 
 This project is licensed under the The MIT License (MIT) - see the LICENSE.md file for details.
