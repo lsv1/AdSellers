@@ -1,5 +1,3 @@
-# multiprocess_examples_1.py
-
 import logging
 import multiprocessing
 import os
