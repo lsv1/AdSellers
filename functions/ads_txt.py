@@ -14,6 +14,7 @@ from tqdm import tqdm
 
 import settings
 
+# Swallow SSL errors.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -32,6 +33,13 @@ def get_domain_list(shuffle=None):
 
 def get_ads_txt(domain):
     try:
+        # Check if the file already exists, for resuming scrape on same day.
+        filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_" + domain + ".csv"
+        file_path = settings.DIR_ARCHIVE + "/" + filename
+        if os.path.isfile(file_path):
+            logging.debug(domain + ' file already scraped, skipping.')
+            return
+
         url = 'https://www.' + domain + '/ads.txt'
 
         response = requests.get(url,
@@ -51,6 +59,7 @@ def get_ads_txt(domain):
             return
 
         df = pd.DataFrame()
+
         for line in data.splitlines():
             entries_df = pd.DataFrame()
             try:
@@ -80,17 +89,16 @@ def get_ads_txt(domain):
                 pass
 
         if df.shape[0] > 0:
-            filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_" + domain + ".csv"
-            df.to_csv(path_or_buf=settings.DIR_ARCHIVE + "/" + filename,
+            df.to_csv(path_or_buf=file_path,
                       index=False,
                       encoding='utf-8')
 
         else:
-            logging.debug('Failed to scrape ' + domain)
-        logging.debug('Scraped ' + domain)
+            logging.debug(domain + ' failed to scrape.')
+        logging.debug(domain + ' scraped.')
 
     except:
-        logging.debug('Failed to scrape ' + domain)
+        logging.debug(domain + ' failed to scrape.')
         pass
 
 
@@ -128,4 +136,5 @@ def async_process():
 
 
 if __name__ == "__main__":
-    async_process()
+    get_ads_txt('mtv.com')
+    # async_process()
