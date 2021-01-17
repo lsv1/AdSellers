@@ -7,6 +7,7 @@ import multiprocessing
 import os
 import random
 from multiprocessing import Pool
+from urllib.parse import urlparse
 
 import pandas as pd
 import requests
@@ -15,15 +16,19 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 import settings
+from functions import helpers
 
 # Swallow SSL errors.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+# logging.basicConfig(level=logging.DEBUG)
+
+
 def get_domain_list(shuffle=None):
     df = pd.read_sql("""
                      SELECT DISTINCT "domain" FROM sellers WHERE "domain" IS NOT NULL
-                     """, con=settings.DB_SELLERS_JSON)
+                     """, con=settings.CON_SELLERS_JSON)
 
     list = df['domain'].to_list()
 
@@ -34,10 +39,17 @@ def get_domain_list(shuffle=None):
 
 
 def get_ads_txt(domain):
+    # Handle some odd cases in sellers.json
+    if len(urlparse(domain).netloc) > 0:
+        domain = urlparse(domain).netloc
+    elif "/" in domain:
+        domain = domain.split("/")[0]
+
+    # Check if the file already exists, for resuming scrape on same day.
+    filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_" + domain + ".csv"
+    file_path = settings.DIR_ARCHIVE + "/" + filename
     try:
-        # Check if the file already exists, for resuming scrape on same day.
-        filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_" + domain + ".csv"
-        file_path = settings.DIR_ARCHIVE + "/" + filename
+
         if os.path.isfile(file_path):
             logging.debug(domain + ' file already scraped, skipping.')
             return
@@ -51,12 +63,14 @@ def get_ads_txt(domain):
                                 verify=False)  # Don't verify SSL, just get the data.
 
         if response.status_code != 200:
+            helpers.touch(file_path)
             logging.debug(domain + ": Bad response, skipping.")
             return
 
         data = response.text
 
         if bool(BeautifulSoup(data, "html.parser").find()):
+            helpers.touch(file_path)
             logging.debug(domain + ": HTML detected, skipping.")
             return
 
@@ -97,12 +111,16 @@ def get_ads_txt(domain):
             df.to_csv(path_or_buf=file_path,
                       index=False,
                       encoding='utf-8')
+        elif df.shape[0] == 0:
+            helpers.touch(file_path)
 
         else:
             logging.debug(domain + ' failed to scrape.')
+            helpers.touch(file_path)
         logging.debug(domain + ' scraped.')
 
     except:
+        helpers.touch(file_path)
         logging.debug(domain + ' failed to scrape.')
         pass
 
@@ -123,7 +141,13 @@ def run_apply_async_multiprocessing(func, argument_list, num_processes):
     return result_list_tqdm
 
 
-def async_process():
+def async_process(domains=None):
+    '''
+
+    :param domains: Expects array.
+    :return: None, finished processing.
+    '''
+
     # Create necessary folder if does not exist.
     try:
         os.stat(settings.DIR_ARCHIVE)
@@ -132,14 +156,15 @@ def async_process():
 
     num_processes = multiprocessing.cpu_count()
     argument_list = get_domain_list(shuffle=True)
+    if domains:
+        argument_list = domains
     logging.info("Processing " + str(len(argument_list)) + " domains.")
-    result_list = run_apply_async_multiprocessing(func=get_ads_txt,
-                                                  argument_list=argument_list,
-                                                  num_processes=num_processes)
-    assert result_list == argument_list
+    run_apply_async_multiprocessing(func=get_ads_txt,
+                                    argument_list=argument_list,
+                                    num_processes=num_processes)
     logging.info("Done.")
 
 
 if __name__ == "__main__":
-    get_ads_txt('mtv.com')
-    # async_process()
+    get_ads_txt('acmadcentre.com.au/about/australian-community-media')
+    # async_process(domains=['acmadcentre.com.au/about/australian-community-media'])

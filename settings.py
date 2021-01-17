@@ -11,11 +11,13 @@ DIR_ROOT = os.path.dirname(os.path.abspath(__file__))
 DIR_DATABASES = DIR_ROOT + '/databases/'
 DIR_ARCHIVE = DIR_ROOT + '/archive/'
 
-# DATABASES
-DB_SELLERS_JSON = create_engine('sqlite:///' + DIR_DATABASES + '/SELLERS_JSON.db')
-DB_ADS_TXT = create_engine('sqlite:///' + DIR_DATABASES + '/ADSTXT.db')
+# SQLITE DATABASES
+DB_SELLERS_JSON = DIR_DATABASES + '/SELLERS_JSON.db'
+DB_ADS_TXT = DIR_DATABASES + '/ADS_TXT.db'
 
-# BASIC DATA
+# DATABASE CONNECTIONS
+CON_SELLERS_JSON = create_engine('sqlite:///' + DB_SELLERS_JSON)
+CON_ADS_TXT = create_engine('sqlite:///' + DB_ADS_TXT)
 
 # REQUESTS
 HEADERS = {
@@ -32,8 +34,7 @@ HEADERS = {
     'Accept-Language': 'en-US,en;q=0.9',
 }
 
-# Source Files
-
+# SELLERS.JSON SOURCES
 LIST_OF_SELLERS_JSON = {'Xandr': 'https://xandr.com/sellers.json',
                         'Google': 'http://realtimebidding.google.com/sellers.json',
                         'District M': 'https://districtm.io/sellers.json',
@@ -42,6 +43,7 @@ LIST_OF_SELLERS_JSON = {'Xandr': 'https://xandr.com/sellers.json',
                         'Index Exchnage': 'https://indexexchange.com/sellers.json',
                         'Amazon A9': 'https://aps.amazon.com/sellers.json'}
 
+# BASIC DATA
 ADSTXT_ENTRY_RANGE_SIZES = [3, 4]
 
 try:

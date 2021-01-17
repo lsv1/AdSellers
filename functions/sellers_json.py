@@ -63,7 +63,7 @@ def get_all_sellers_json():
         df = pd.concat([df, seller_df], ignore_index=True)
 
     df.to_sql(name="sellers",
-              con=settings.DB_SELLERS_JSON,
+              con=settings.CON_SELLERS_JSON,
               if_exists='replace',
               dtype={'scrape_date': sqlalchemy.types.DATE})
 

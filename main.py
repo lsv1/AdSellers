@@ -3,10 +3,10 @@
 
 import logging
 
-from functions import ads_txt, sellers_json
+from functions import ads_txt
 
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
-    sellers_json.get_all_sellers_json()
+    # sellers_json.get_all_sellers_json()
     ads_txt.async_process()
