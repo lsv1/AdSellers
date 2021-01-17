@@ -24,6 +24,14 @@ Python 3.8
 * sqlalchemy
 * sqlite
 
+### Instructions
+
+* Clone the repository.
+* Install any missing dependencies to your system or venv.
+* Run main.py
+
+As of 2021-01-17 only the sqlite files are loaded.
+
 ## Authors
 
 Luis Sastre Verzun
