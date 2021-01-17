@@ -39,6 +39,11 @@ def get_domain_list(shuffle=None):
 
 
 def get_ads_txt(domain):
+    '''
+
+    :param domain: A domain to scrape and write to CSV.
+    :return: If successful writes file to archive folder.
+    '''
     # Handle some odd cases in sellers.json
     if len(urlparse(domain).netloc) > 0:
         domain = urlparse(domain).netloc
@@ -124,6 +129,13 @@ def get_ads_txt(domain):
 
 
 def run_apply_async_multiprocessing(func, argument_list, num_processes):
+    '''
+
+    :param func: Input function.
+    :param argument_list: List of arguments, in our case it's just domains.
+    :param num_processes: Number of threads to start, functions calling this one should try to use max CPU cores.
+    :return:
+    '''
     pool = Pool(processes=num_processes)
 
     jobs = [
@@ -156,7 +168,7 @@ def async_process(domains=None):
     argument_list = get_domain_list(shuffle=True)
     if domains:
         argument_list = domains
-    logging.info("Processing " + str(len(argument_list)) + " domains.")
+    logging.info("Processing " + str(len(argument_list)) + " domains with " + str(num_processes) + " threads.")
     run_apply_async_multiprocessing(func=get_ads_txt,
                                     argument_list=argument_list,
                                     num_processes=num_processes)
