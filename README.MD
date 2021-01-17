@@ -30,7 +30,7 @@ Python 3.8
 * Install any missing dependencies to your system or venv.
 * Run main.py
 
-As of 2021-01-17 only the sqlite files are loaded.
+As of 2021-01-17 this will only populate the database with all ads.txt entries.
 
 ## Authors
 
