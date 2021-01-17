@@ -2,6 +2,7 @@
 
 import logging
 import multiprocessing
+import os
 import random
 from multiprocessing import Pool
 
@@ -110,6 +111,12 @@ def run_apply_async_multiprocessing(func, argument_list, num_processes):
 
 
 def async_process():
+    # Create necessary folder if does not exist.
+    try:
+        os.stat(settings.DIR_ARCHIVE)
+    except:
+        os.mkdir(settings.DIR_ARCHIVE)
+
     num_processes = multiprocessing.cpu_count()
     argument_list = get_domain_list(shuffle=True)
     logging.info("Processing " + str(len(argument_list)) + " domains.")

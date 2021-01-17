@@ -3,6 +3,7 @@
 
 import json
 import logging
+import os
 
 import pandas as pd
 import requests
@@ -49,6 +50,12 @@ def get_sellers_json(name, file):
 
 
 def get_all_sellers_json():
+    # Create necessary folder if does not exist.
+    try:
+        os.stat(settings.DIR_DATABASES)
+    except:
+        os.mkdir(settings.DIR_DATABASES)
+
     df = pd.DataFrame()
 
     for seller in settings.LIST_OF_SELLERS_JSON:
