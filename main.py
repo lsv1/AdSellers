@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import logging
 
 from functions import ads_txt, sellers_json
