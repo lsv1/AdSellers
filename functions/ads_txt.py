@@ -91,6 +91,9 @@ def get_ads_txt(domain):
                 pass
 
         if df.shape[0] > 0:
+            # I want to write CSV files of each scrape to disk for eventually being able to host the latest files.
+            # Pandas was an easy way to complete this, though it might be slower than creating the string for each line
+            # and writing to file.
             df.to_csv(path_or_buf=file_path,
                       index=False,
                       encoding='utf-8')
