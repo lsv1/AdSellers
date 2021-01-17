@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 DIR_ROOT = os.path.dirname(os.path.abspath(__file__))
 DIR_DATABASES = DIR_ROOT + '/databases/'
 DIR_ARCHIVE = DIR_ROOT + '/archive/'
+DIR_RESOURCES = DIR_ROOT + '/resources/'
 
 # SQLITE DATABASES
 DB_SELLERS_JSON = DIR_DATABASES + '/SELLERS_JSON.db'
@@ -34,14 +35,8 @@ HEADERS = {
     'Accept-Language': 'en-US,en;q=0.9',
 }
 
-# SELLERS.JSON SOURCES
-LIST_OF_SELLERS_JSON = {'Xandr': 'https://xandr.com/sellers.json',
-                        'Google': 'http://realtimebidding.google.com/sellers.json',
-                        'District M': 'https://districtm.io/sellers.json',
-                        'Media.net': 'https://media.net/sellers.json',
-                        'Verizon Media': 'https://www.verizonmedia.com/sellers.json',
-                        'Index Exchnage': 'https://indexexchange.com/sellers.json',
-                        'Amazon A9': 'https://aps.amazon.com/sellers.json'}
+# RESOURCES
+FILE_SELLERS_JSON = DIR_RESOURCES + '/sellers.json.txt'
 
 # BASIC DATA
 ADSTXT_ENTRY_RANGE_SIZES = [3, 4]

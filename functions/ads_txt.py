@@ -25,9 +25,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # logging.basicConfig(level=logging.DEBUG)
 
 
-def get_domain_list(shuffle=None):
+def get_domains_and_sellers(shuffle=None):
     df = pd.read_sql("""
-                     SELECT DISTINCT "domain" FROM sellers WHERE "domain" IS NOT NULL
+                     SELECT DISTINCT "domain", "seller_name" FROM sellers WHERE "domain" IS NOT NULL
                      """, con=settings.CON_SELLERS_JSON)
 
     list = df['domain'].to_list()

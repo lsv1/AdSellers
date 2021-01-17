@@ -18,4 +18,6 @@ def main(parse_sellers_json=None, parse_ads_txt=None, load_database=None):
 
 
 if __name__ == "__main__":
-    main(parse_ads_txt=True)
+    main(parse_sellers_json=True,
+         parse_ads_txt=True,
+         load_database=False)
