@@ -1,6 +1,4 @@
-# Project Title
-
-AdSellers
+# AdSellers
 
 ## Description
 
