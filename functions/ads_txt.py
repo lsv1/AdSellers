@@ -48,14 +48,13 @@ def get_ads_txt(domain):
     # Check if the file already exists, for resuming scrape on same day.
     filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_" + domain + ".csv"
     file_path = settings.DIR_ARCHIVE + "/" + filename
-    try:
 
+    try:
         if os.path.isfile(file_path):
             logging.debug(domain + ' file already scraped, skipping.')
             return
 
         url = 'https://www.' + domain + '/ads.txt'
-
         response = requests.get(url,
                                 headers=settings.HEADERS,
                                 allow_redirects=True,
@@ -99,7 +98,6 @@ def get_ads_txt(domain):
                         entries_df['certificate_authority_id'] = row[3]
                     except IndexError:
                         pass
-
                 df = pd.concat([df, entries_df], ignore_index=True)
             except:
                 pass
@@ -144,8 +142,8 @@ def run_apply_async_multiprocessing(func, argument_list, num_processes):
 def async_process(domains=None):
     '''
 
-    :param domains: Expects array.
-    :return: None, finished processing.
+    :param domains: Expects array
+    :return: None
     '''
 
     # Create necessary folder if does not exist.
