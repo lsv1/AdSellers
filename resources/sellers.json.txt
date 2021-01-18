@@ -2,12 +2,9 @@ https://www.advenuemedia.co.uk/sellers.json
 https://storage.googleapis.com/adx-rtb-dictionaries/sellers.json
 https://appnexus.com/sellers.json
 https://improvedigital.com/sellers.json
-https://indexexchange.com/sellers.json
 https://pubmatic.com/sellers.json
 https://spotxchange.com/sellers.json
-https://spotx.tv/sellers.json
 https://tremorhub.com/sellers.json
-https://adform.com/sellers.json
 https://ad-generation.jp/sellers.json
 https://admixer.net/sellers.json
 https://aps.amazon.com/sellers.json
@@ -263,7 +260,6 @@ https://gameloft.com/sellers.json
 https://bat-ads.com/sellers.json
 https://app.mopub.com/sellers.json
 https://adverty.com/sellers.json
-https://www.indexexchange.com/sellers.json
 http://advertising.com/sellers.json
 http://appnexus.com/sellers.json
 http://freewheel.tv/sellers.json
@@ -272,7 +268,6 @@ http://indexexchange.com/sellers.json
 http://pubmatic.com/sellers.json
 http://spotxchange.com/sellers.json
 http://spotx.tv/sellers.json
-http://tremorhub.com/sellers.json
 http://adform.com/sellers.json
 http://ad-generation.jp/sellers.json
 http://admixer.net/sellers.json
@@ -544,7 +539,6 @@ http://gameloft.com/sellers.json
 http://bat-ads.com/sellers.json
 http://app.mopub.com/sellers.json
 http://adverty.com/sellers.json
-http://www.indexexchange.com/sellers.json
 https://cdn-source.spotxchange.com/media/cdn/cdn/iab/sellers.json
 https://www.verizonmedia.com/sellers.json
 http://adflare.com/sellers.json
