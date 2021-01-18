@@ -92,6 +92,7 @@ def sellers_json_url_list(shuffle=None):
 
         raw_domains = []
         for url in seller_json_urls:
+            url = url.replace("https://", "http://")
             url = url.split("//")[1]
             url = url.split("/sellers.json")[0]
             raw_domains.append(url)
@@ -117,10 +118,14 @@ def get_all_sellers_json():
 
     df = pd.DataFrame()
     for url in sellers_json_url_list(shuffle=True):
-        logging.info(url + " starting processing.")
-        df_sellers = get_sellers_json(url)
-        df = pd.concat([df, df_sellers], ignore_index=True)
-        logging.info(url + " done processing.")
+        try:
+            logging.info(url + " starting processing.")
+            df_sellers = get_sellers_json(url)
+            df = pd.concat([df, df_sellers], ignore_index=True)
+            logging.info(url + " done processing.")
+        except Exception as e:
+            logging.info(url + " error processing: " + str(e))
+            pass
     df.to_sql(name="sellers",
               con=settings.CON_SELLERS_JSON,
               if_exists='replace',
