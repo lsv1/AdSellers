@@ -11,16 +11,24 @@ import sqlalchemy
 
 import settings
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 def get_sellers_json(url):
     logging.debug('Getting sellers.json for ' + str(url))
     date = pd.to_datetime('today')
 
-    response = requests.get(url, headers=settings.HEADERS)
+    response = requests.get(url, headers=settings.HEADERS, allow_redirects=True)
+    if response.status_code != 200:
+        logging.debug("Bad response for " + url)
+        return
 
-    data = json.loads(response.text)
+    try:
+        data = json.loads(response.text)
+    except:
+        logging.debug("Unable to parse JSON " + url)
+        return
+
     logging.debug('Downloaded sellers.json for ' + str(url))
 
     df = pd.json_normalize(data["sellers"])
@@ -70,8 +78,10 @@ def get_all_sellers_json():
 
         df = pd.DataFrame()
         for url in seller_json_urls:
+            logging.info(url + " starting processing.")
             df_sellers = get_sellers_json(url)
             df = pd.concat([df, df_sellers], ignore_index=True)
+            logging.info(url + " done processing.")
         df.to_sql(name="sellers",
                   con=settings.CON_SELLERS_JSON,
                   if_exists='replace',
@@ -82,4 +92,4 @@ def get_all_sellers_json():
 
 if __name__ == "__main__":
     get_all_sellers_json()
-    # get_sellers_json('https://www.advenuemedia.co.uk/sellers.json')
+    # get_sellers_json('http://www.justpremium.com/sellers.json')
