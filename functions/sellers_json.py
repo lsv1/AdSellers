@@ -21,17 +21,19 @@ def get_sellers_json(url):
     date = pd.to_datetime('today')
 
     response = requests.get(url, headers=settings.HEADERS, allow_redirects=True)
+    logging.debug('Downloaded sellers.json for ' + str(url))
     if response.status_code != 200:
         logging.debug("Bad response for " + url)
         return
 
     try:
         data = json.loads(response.text)
+        logging.debug('JSON loaded sellers.json for ' + str(url))
     except:
         logging.debug("Unable to parse JSON " + url)
         return
 
-    # Fix for Telaria's sellers.json because they don't know how specs work.
+    # Fix for Telaria's sellers.json (https://tremorhub.com/sellers.json) because they don't follow the spec.
     try:
         data['contact_email'] = data.pop('contactEmail')
     except:
@@ -41,10 +43,7 @@ def get_sellers_json(url):
     except:
         pass
 
-    logging.debug('Downloaded sellers.json for ' + str(url))
-
     df = pd.json_normalize(data["sellers"])
-
     logging.debug('Normalized sellers.json for ' + str(url))
 
     try:
