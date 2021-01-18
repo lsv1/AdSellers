@@ -9,7 +9,6 @@ from urllib.parse import urlparse
 
 import pandas as pd
 import requests
-import sqlalchemy
 
 import settings
 
@@ -111,28 +110,31 @@ def sellers_json_url_list(shuffle=None):
 def get_all_sellers_json():
     # Create necessary folder if does not exist.
     try:
-        os.stat(settings.DIR_DATABASES)
+        os.stat(settings.DIR_ARCHIVE)
     except:
-        os.mkdir(settings.DIR_DATABASES)
+        os.mkdir(settings.DIR_ARCHIVE)
 
-    df = pd.DataFrame()
     for url in sellers_json_url_list(shuffle=True):
         try:
             logging.info(url + " starting processing.")
+
+            domain = urlparse(url).netloc
+            filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_SELLERS.JSON_" + domain + ".csv"
+            file_path = settings.DIR_ARCHIVE + "/" + filename
+
             df_sellers = get_sellers_json(url)
-            df = pd.concat([df, df_sellers], ignore_index=True)
+            df_sellers.to_csv(path_or_buf=file_path,
+                              index=False,
+                              encoding='utf-8')
+
             logging.info(url + " done processing.")
         except Exception as e:
             logging.info(url + " error processing: " + str(e))
             pass
-    df.to_sql(name="sellers",
-              con=settings.CON_SELLERS_JSON,
-              if_exists='replace',
-              dtype={'scrape_date': sqlalchemy.types.DATE})
 
-    logging.info('Wrote all sellers.json to database.')
+    logging.info('Wrote all sellers.json files to archive.')
 
 
 if __name__ == "__main__":
     get_all_sellers_json()
-    # print(get_sellers_json('https://tremorhub.com/sellers.json'))
+    # print(get_sellers_json('http://richaudience.com/sellers.json'))

@@ -25,17 +25,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # logging.basicConfig(level=logging.DEBUG)
 
 
-def get_domains_and_sellers(shuffle=None):
+def get_domain_list(shuffle=None):
     df = pd.read_sql("""
-                     SELECT DISTINCT "domain", "seller_name" FROM sellers WHERE "domain" IS NOT NULL
+                     SELECT DISTINCT "domain" FROM SELLERS WHERE "domain" IS NOT NULL
                      """, con=settings.CON_SELLERS_JSON)
 
-    list = df['domain'].to_list()
+    domain_list = df['domain'].to_list()
 
     if shuffle:
-        random.shuffle(list)
+        random.shuffle(domain_list)
 
-    return list
+    return domain_list
 
 
 def get_ads_txt(domain):
@@ -50,16 +50,17 @@ def get_ads_txt(domain):
     elif "/" in domain:
         domain = domain.split("/")[0]
 
-    # Check if the file already exists, for resuming scrape on same day.
-    filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_" + domain + ".csv"
+    # Basic Data
+    filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_ADS.TXT_" + domain + ".csv"
     file_path = settings.DIR_ARCHIVE + "/" + filename
 
+    # Check if the file already exists, for resuming scrape on same day.
     try:
         if os.path.isfile(file_path):
             logging.debug(domain + ' file already scraped, skipping.')
             return
 
-        url = 'https://www.' + domain + '/ads.txt'
+        url = 'http://www.' + domain + '/ads.txt'
         response = requests.get(url,
                                 headers=settings.HEADERS,
                                 allow_redirects=True,
@@ -176,5 +177,6 @@ def async_process(domains=None):
 
 
 if __name__ == "__main__":
-    get_ads_txt('acmadcentre.com.au/about/australian-community-media')
+    # get_ads_txt('acmadcentre.com.au/about/australian-community-media')
     # async_process(domains=['acmadcentre.com.au/about/australian-community-media'])
+    async_process()
