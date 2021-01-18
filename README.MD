@@ -39,6 +39,7 @@ Luis Sastre Verzun
 ## Shout outs
 
 * Peter Brendan (https://sellersjsons.com/)
+* Lei Mao (https://leimao.github.io/blog/Python-tqdm-Multiprocessing/)
 
 ## License
 
