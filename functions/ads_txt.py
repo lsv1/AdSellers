@@ -49,6 +49,8 @@ def get_ads_txt(domain):
         domain = urlparse(domain).netloc
     elif "/" in domain:
         domain = domain.split("/")[0]
+    elif "- 300*250" in domain:
+        domain = domain.replace("- 300*250", "")
 
     # Basic Data
     domain = domain.rstrip().lstrip().strip()
@@ -178,6 +180,6 @@ def async_process(domains=None):
 
 
 if __name__ == "__main__":
-    # get_ads_txt('kasautizindagikii.com\t')
+    # get_ads_txt('affiliationworld.com- 300*250')
     # async_process(domains=['acmadcentre.com.au/about/australian-community-media'])
     async_process()

@@ -11,8 +11,11 @@ def chunks(list_size, list_chunk_size):
 
 
 def touch(path):
-    with open(path, 'a'):
-        os.utime(path, None)
+    try:
+        with open(path, 'a'):
+            os.utime(path, None)
+    except:
+        pass
 
 
 if __name__ == "__main__":
