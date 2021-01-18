@@ -51,6 +51,7 @@ def get_ads_txt(domain):
         domain = domain.split("/")[0]
 
     # Basic Data
+    domain = domain.rstrip().lstrip().strip()
     filename = pd.to_datetime('today').strftime("%Y_%m_%d") + "_ADS.TXT_" + domain + ".csv"
     file_path = settings.DIR_ARCHIVE + "/" + filename
 
@@ -177,6 +178,6 @@ def async_process(domains=None):
 
 
 if __name__ == "__main__":
-    # get_ads_txt('acmadcentre.com.au/about/australian-community-media')
+    # get_ads_txt('kasautizindagikii.com\t')
     # async_process(domains=['acmadcentre.com.au/about/australian-community-media'])
     async_process()
